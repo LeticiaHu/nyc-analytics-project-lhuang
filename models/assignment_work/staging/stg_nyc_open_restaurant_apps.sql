@@ -75,13 +75,26 @@ cleaned AS (
        CAST(sidewalk_dimensions_length AS STRING) AS sidewalk_dimensions_length,
        CAST(sidewalk_dimensions_width AS STRING) AS sidewalk_dimensions_width,
        CAST(sidewalk_dimensions_area AS STRING) AS sidewalk_dimensions_area,
-       CAST(approved_for_sidewalk_seating AS BOOLEAN) AS approved_for_sidewalk_seating,
-       CAST(approved_for_roadway_seating AS Boolean) AS approved_for_roadway_seating,
-       CAST(qualify_alcohol AS BOOLEAN) AS qualify_alcohol,
        CAST(latitude AS DECIMAL) AS latitude,
        CAST(longitude AS DECIMAL) AS longitude,
 
-        
+    CASE
+        WHEN UPPER(TRIM(CAST(approved_for_sidewalk_seating AS STRING))) IN ('YES', 'Y', 'TRUE', '1') THEN TRUE
+        WHEN UPPER(TRIM(CAST(approved_for_sidewalk_seating AS STRING))) IN ('NO', 'N', 'FALSE', '0') THEN FALSE
+        ELSE NULL
+    END AS approved_for_sidewalk_seating,
+
+    CASE
+        WHEN UPPER(TRIM(CAST(approved_for_roadway_seating AS STRING))) IN ('YES', 'Y', 'TRUE', '1') THEN TRUE
+        WHEN UPPER(TRIM(CAST(approved_for_roadway_seating AS STRING))) IN ('NO', 'N', 'FALSE', '0') THEN FALSE
+        ELSE NULL
+    END AS approved_for_roadway_seating,
+
+    CASE
+        WHEN UPPER(TRIM(CAST(qualify_alcohol AS STRING))) IN ('YES', 'Y', 'TRUE', '1') THEN TRUE
+        WHEN UPPER(TRIM(CAST(qualify_alcohol AS STRING))) IN ('NO', 'N', 'FALSE', '0') THEN FALSE
+        ELSE NULL
+    END AS qualify_alcohol,    
            
 
        -- Metadata
