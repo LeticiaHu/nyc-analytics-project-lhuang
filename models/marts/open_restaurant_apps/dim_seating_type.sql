@@ -31,3 +31,5 @@ seating_dimension AS (
 
 SELECT * FROM seating_dimension
 
+
+
