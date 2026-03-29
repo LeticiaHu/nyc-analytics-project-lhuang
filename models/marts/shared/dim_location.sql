@@ -26,4 +26,4 @@ location_dimension AS (
    FROM all_locations
 )
 
-SELECT * FROM location_dimension --TODO replace ??s with what to select. HINT: May be quite simple!  
+SELECT * FROM location_dimension --TODO replace ??s with what to select. HINT: May be quite simple!    

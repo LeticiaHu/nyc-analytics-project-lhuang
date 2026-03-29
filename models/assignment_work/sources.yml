@@ -66,7 +66,7 @@ sources:
           - name: facility_type
             description: Type of facility where incident occurred
           - name: intersection_street_1
-            description: First street forming intersection where incident occurred
+            description: First street forming intersection where incident occurred 
           - name: intersection_street_2
             description: Second street forming intersection where incident occurred
           - name: open_data_channel_type
