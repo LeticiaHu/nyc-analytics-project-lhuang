@@ -2,14 +2,18 @@
 
 WITH all_locations AS (
    -- Get locations from 311 requests
-   SELECT DISTINCT CAST(borough AS STRING) AS borough
+   SELECT DISTINCT 
+    CAST(borough AS STRING) AS borough,
+    CAST(incident_zip AS STRING) AS zip_code
    FROM {{ ref('stg_nyc_311_dot') }}
    WHERE borough IS NOT NULL
 
    UNION DISTINCT
 
    -- Get locations from restaurant applications
-   SELECT DISTINCT SELECT DISTINCT CAST(borough AS STRING) AS borough
+   SELECT DISTINCT 
+   CAST(borough AS STRING) AS borough,
+   CAST(zip AS STRING) AS zip_code
    FROM {{ ref('stg_nyc_open_restaurant_apps') }}
    WHERE borough IS NOT NULL
 ),
@@ -22,4 +26,4 @@ location_dimension AS (
    FROM all_locations
 )
 
-SELECT * FROM location_dimension --TODO replace ??s with what to select. HINT: May be quite simple! 
+SELECT * FROM location_dimension --TODO replace ??s with what to select. HINT: May be quite simple!  
