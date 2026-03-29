@@ -7,7 +7,6 @@ WITH seating_types AS (
         WHEN UPPER(TRIM(CAST(approved_for_sidewalk_seating AS STRING))) IN ('NO', 'N', 'FALSE', '0') THEN FALSE
         ELSE NULL
     END AS approved_for_sidewalk,
-
     CASE
         WHEN UPPER(TRIM(CAST(approved_for_roadway_seating AS STRING))) IN ('YES', 'Y', 'TRUE', '1') THEN TRUE
         WHEN UPPER(TRIM(CAST(approved_for_roadway_seating AS STRING))) IN ('NO', 'N', 'FALSE', '0') THEN FALSE
@@ -24,10 +23,9 @@ seating_dimension AS (
            'approved_for_sidewalk',
            'approved_for_roadway'
        ]) }} AS seating_type_key,
-       'seating_interest',
-       'approved_for_sidewalk',
-       'approved_for_roadway'
-
+       seating_interest,
+       approved_for_sidewalk,
+       approved_for_roadway
    FROM seating_types
 )
 
