@@ -36,5 +36,5 @@ date_dimension AS (
    FROM all_dates
 )
 
-SELECT * FROM date_dimension
+SELECT * FROM date_dimension 
 
