@@ -1,4 +1,5 @@
 -- Location dimension shared by both restaurant applications and 311 service reqs
+{{ config(materialized='table', schema='nyc_transit_restaurants_marts') }}
 
 WITH all_locations AS (
    -- Get locations from 311 requests
