@@ -1,4 +1,5 @@
 -- Date dimension shared by both restaurant applications and 311 requests
+{{ config(materialized='table', schema='nyc_transit_restaurants_marts') }}
 
 WITH all_dates AS (
    -- Get dates (dates, no time included) from 311 requests
