@@ -1,5 +1,5 @@
 -- Seating type dimension for open restaurant seating applications
-{{ config(materialized='table', schema='nyc_311_dot') }}
+{{ config(materialized='table', schema='nyc_open_restaurant_apps') }}
 WITH seating_types AS (
    SELECT DISTINCT 
     seating_interest_sidewalk AS seating_interest,
