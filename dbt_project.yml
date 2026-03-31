@@ -35,6 +35,8 @@ models:
 
        open_restaurant_apps:
          +materialized: table
+         +schema: nyc_open_restaurant_apps
 
        dot_311:
          +materialized: table
+         +schema: nyc_311_dot
