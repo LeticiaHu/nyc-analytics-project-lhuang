@@ -40,3 +40,24 @@ models:
        dot_311:
          +materialized: table
          +schema: nyc_311_dot
+
+# Copied exactly the same structure as above
+   cis9440_group_project_work:
+     staging:
+       +materialized: table
+       +schema: WHATEVER YOU ALL DECIDE YOUR STAHING DATASET NAME SHOULD BE TOGETHER
+
+     marts:
+       +materialized: table
+       +schema: wHATEVER YOU ALL DECIDE YOUR WAREHOUSE DATASET NAME SHOULD BE 
+      
+       conformed:
+         +materialized: table
+
+       data_source_not_311_whatever_that_is:
+         +materialized: table
+         +schema: nyc_open_restaurant_apps
+
+       Whatever_your_311_subset_data_is:
+         +materialized: table
+         +schema: nyc_311_dot         
