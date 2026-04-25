@@ -9,7 +9,7 @@ WITH governing_region AS (
     WHERE community_board IS NOT NULL
 ),
 
-dim_problem_details AS (
+dim_governing_region AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key([
             'community_board',
