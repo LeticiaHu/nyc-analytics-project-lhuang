@@ -1,4 +1,6 @@
--- models/marts/dim_governing-region.sql
+-- models/marts/dim_governing_region.sql
+
+-- models/marts/dim_governing_region.sql
 
 WITH governing_region AS (
     SELECT DISTINCT
