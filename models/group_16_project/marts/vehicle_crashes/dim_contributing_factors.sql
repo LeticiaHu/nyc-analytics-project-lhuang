@@ -1,4 +1,3 @@
--- models/marts/dim_contributing_factor.sql
 
 -- models/marts/dim_contributing_factor.sql
 
@@ -32,4 +31,4 @@ dim_contributing_factors AS (
 )
 
 SELECT *
-FROM dim_contributing_factors
+FROM dim_contributing_factors 

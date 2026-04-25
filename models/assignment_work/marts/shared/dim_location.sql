@@ -1,4 +1,4 @@
--- Location dimension shared by both restaurant applications and 311 service reqs
+-- Location dimension shared by both restaurant applications and 311 service reqs 
 {{ config(materialized='table', schema='nyc_transit_restaurants_marts') }}
 
 WITH all_locations AS (

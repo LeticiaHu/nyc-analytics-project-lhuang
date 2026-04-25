@@ -1,4 +1,4 @@
--- Date dimension shared by both restaurant applications and 311 requests
+-- Date dimension shared by both restaurant applications and 311 requests  
 {{ config(materialized='table', schema='nyc_transit_restaurants_marts') }}
 
 WITH all_dates AS (
