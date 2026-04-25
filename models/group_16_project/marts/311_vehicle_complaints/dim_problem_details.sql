@@ -6,7 +6,7 @@ WITH problem_details AS (
         complaint_detail,
         additional_detail
     FROM {{ ref('stg_nyc_311_vehicle_complaints') }}
-    WHERE complaint_type IS NOT NULL
+    WHERE complaint_type IS NOT NULL AND complaint_detail IS NOT NULL
 ),
 
 dim_problem_details AS (
