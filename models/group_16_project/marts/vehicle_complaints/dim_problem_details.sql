@@ -3,8 +3,8 @@
 WITH problem_details AS (
     SELECT DISTINCT
         complaint_type,
-        descriptor AS complaint_detail,
-        descriptor_2 AS additional_details
+        complaint_detail,
+        additional_detail
     FROM {{ ref('stg_nyc_311_vehicle_complaints') }}
     WHERE complaint_type IS NOT NULL
 ),
@@ -16,11 +16,9 @@ dim_problem_details AS (
             'complaint_detail',
             'additional_details'
         ]) }} AS problem_details_key,
-
         complaint_type,
         complaint_detail,
-        additional_details
-
+        additional_detail
     FROM problem_details
 )
 
