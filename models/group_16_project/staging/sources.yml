@@ -3,7 +3,7 @@ sources:
   - name: raw
     description: Raw data loaded from NYC Open Data
     database: leticia-huang-cis-9440-hw0
-    schema: group16_nyc_open_data_raw_dataset
+    schema: group16_nyc_open_data_raw_dataset 
     tables:
       - name: source_nyc_311_vehicle_complaints 
         description: 
