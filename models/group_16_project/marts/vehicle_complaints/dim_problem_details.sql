@@ -14,11 +14,11 @@ dim_problem_details AS (
         {{ dbt_utils.generate_surrogate_key([
             'complaint_type',
             'complaint_detail',
-            'additional_details'
+            'additional_detail'
         ]) }} AS problem_details_key,
         complaint_type,
         complaint_detail,
-        additional_detail
+        additional_detail AS additional_details
     FROM problem_details
 )
 
