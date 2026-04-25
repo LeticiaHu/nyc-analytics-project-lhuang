@@ -1,0 +1,28 @@
+-- models/marts/dim_problem_details.sql
+
+WITH problem_details AS (
+    SELECT DISTINCT
+        complaint_type,
+        descriptor AS complaint_detail,
+        descriptor_2 AS additional_details
+    FROM {{ ref('stg_nyc_311_vehicle_complaints') }}
+    WHERE complaint_type IS NOT NULL
+),
+
+dim_problem_details AS (
+    SELECT
+        {{ dbt_utils.generate_surrogate_key([
+            'complaint_type',
+            'complaint_detail',
+            'additional_details'
+        ]) }} AS problem_details_key,
+
+        complaint_type,
+        complaint_detail,
+        additional_details
+
+    FROM problem_details
+)
+
+SELECT *
+FROM dim_problem_details

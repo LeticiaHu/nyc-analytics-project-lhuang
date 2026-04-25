@@ -5,7 +5,7 @@ sources:
     database: leticia-huang-cis-9440-hw0
     schema: group16_nyc_open_data_raw_dataset
     tables:
-      - name: source_nyc_311_vehicle_complaints 
+      - name: source_nyc_311_vehicle_complaints  
         description: 
           NYC 311 service requests for NYPD with complaint types related to vehicles.
           One row per service request.
