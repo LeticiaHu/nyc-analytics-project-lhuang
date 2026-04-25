@@ -1,15 +1,13 @@
-
 version: 2
-
 sources:
   - name: raw
     description: Raw data loaded from NYC Open Data
     database: leticia-huang-cis-9440-hw0
-    schema: nyc_hw3_raw_data
+    schema: group16_nyc_open_data_raw_dataset
     tables:
-      - name: source_dot_service_requests_history
-        description: |
-          NYC 311 service requests for Dept of Transportation.
+      - name: source_nyc_311_vehicle_complaints 
+        description: 
+          NYC 311 service requests for NYPD with complaint types related to vehicles.
           One row per service request.
         columns:
           - name: unique_key
@@ -21,6 +19,8 @@ sources:
             description: Date and time the request was created
           - name: closed_date
             description: Date and time the request was closed
+          - name: due_date
+            description: Expected due date for request resolution
           - name: agency
             description: Agency code
           - name: agency_name
@@ -30,162 +30,171 @@ sources:
           - name: descriptor
             description: Further description of the complaint
           - name: descriptor_2
-            description: Additional description of the complaint
+            description: Further 3rd level description of the complaint
+          - name: vehicle_type
+            description: If the incident is a taxi, this field describes the type of TLC vehicle
+          - name: taxi_company_borough
+            description: Taxi company borough (if incident is a taxi) 
+          - name: taxi_pick_up_location
+            description: Taxi pickup location (if incident involves a taxi)
+          - name: bridge_highway_name
+            description: Bridge/Highway name (if incident involves one)
+          - name: bridge_highway_direction
+            description: Direction on bridge or highway (e.g. Northbound)
+          - name: road_ramp
+            description: Road ramp identifier or bridge/highway incidents
+          - name: bridge_highway_segment
+            description: Specific segment of bridge or highway
           - name: location_type
             description: Location where the incident occurred
           - name: incident_zip
             description: Zip code of the incident location
           - name: incident_address
             description: Street address of the incident
+          - name: address_type
+            description: 'Type of address (e.g., ADDRESS, INTERSECTION, BLOCKFACE)'
+          - name: facility_type
+            description: Type of facility where incident occurred
           - name: latitude
             description: Latitude coordinate
           - name: longitude
             description: Longitude coordinate
-          - name: address_type
-            description: 'Type of address (e.g., ADDRESS, INTERSECTION, BLOCKFACE)'
           - name: bbl
             description: Borough Block and Lot number (NYC tax lot id)
           - name: borough
             description: NYC borough where incident occurred
-          - name: bridge_highway_direction
-            description: Direction on bridge or highway (e.g. Northbound)
-          - name: bridge_highway_name
-            description: Name of bridge or highway where incident occurred
-          - name: bridge_highway_segment
-            description: Specific segment of bridge or highway
           - name: city
             description: City name where incident occurred
           - name: community_board
             description: NYC Community Board district number
+          - name: council district
+            description: The City Council district where the service request is located
           - name: cross_street_1
             description: First cross street near incident location
           - name: cross_street_2
             description: Second cross street near incident location
-          - name: due_date
-            description: Expected due date for request resolution
-          - name: facility_type
-            description: Type of facility where incident occurred
           - name: intersection_street_1
-            description: First street forming intersection where incident occurred 
+            description: First street forming intersection where incident occurred
           - name: intersection_street_2
             description: Second street forming intersection where incident occurred
+          - name: landmark
+            description: Nearby landmark or point of interest
           - name: open_data_channel_type
-            description: 'How request was submitted (ONLINE, PHONE, MOBILE, etc.)'
+            description: How request was submitted (ONLINE, PHONE, MOBILE, etc.)
           - name: park_borough
             description: Borough of park where incident occurred
           - name: park_facility_name
             description: Name of park facility where incident occurred
+          - name: police_precinct
+            description: The NYPD precinct where the service request is located
           - name: resolution_action_updated_date
             description: Date when resolution action was last updated
           - name: resolution_description
             description: Description of how the request was resolved
-          - name: road_ramp
-            description: Road ramp identifier where incident occurred
           - name: status
-            description: 'Current status of request (Open, Closed, In Progress, etc.)'
+            description: Current status of request (Open, Closed, In Progress, etc.)
           - name: street_name
             description: Name of street where incident occurred
           - name: x_coordinate_state_plane
             description: X coordinate in NY State Plane projection system (NAD 83)
           - name: y_coordinate_state_plane
             description: Y coordinate in NY State Plane projection system (NAD 83)
-          - name: landmark
-            description: Nearby landmark or point of interest
 
-  - name: raw_restaurants
-    description: Raw data loaded from NYC Open Data
-    database: leticia-huang-cis-9440-hw0
-    schema: nyc_hw3_raw_data
-    tables:
-      - name: source_nyc_open_restaurant_apps
-        description: |
-          NYC Open Restaurant applications.
-          One application submission per restaurant.
+      - name: source_nyc_vehicle_crashes
+        description: 
+          Details on vehicle crash events in NYC.
+          One row per crash event.
         columns:
-          - name: globalid
-            description: Auto generated unique identifier
+          - name: collision_ID
+            description: Unique record code generated by system. Primary Key for Crash table.
             tests:
               - unique
               - not_null
-          - name: time_of_submission
-            description: Date and time the request was created
-          - name: objectid
-            description: Autogenerated sequential number for each submission
-          - name: seating_interest_sidewalk
-            description: The type of seating the applicant is interested in
-          - name: restaurant_name
-            description: The name of the restaurant
-          - name: legal_business_name
-            description: The legal business name
-          - name: doing_business_as_dba
-            description: The Doing Business As (DBA) name for the restaurant
-          - name: bulding_number
-            description: The street number for the restaurant building
-          - name: street
-            description: Name of the street the restaurant is on
+          - name: crash_date
+            description: Occurrence date of collision
+          - name: crash_time
+            description: Occurence time of collission
           - name: borough
-            description: The borough the restaurant is located in
-          - name: zip
-            description: The zip code of the building
-          - name: business_address
-            description: The full business address
-          - name: food_service_establishment
-            description: The permit number issued to the restaurant by DOHMH
-          - name: sidewalk_dimensions_length
-            description: The length of the sidewalk in feet
-          - name: sidewalk_dimensions_width
-            description: The width of the sidewalk from restaurant to the curb in feet
-          - name: sidewalk_dimensions_area
-            description: >-
-              The total square footage of the sidewalk area in front of the
-              restaurant
-          - name: roadway_dimensions_length
-            description: The length of the roadway in feet
-          - name: roadway_dimensions_width
-            description: The width of the roadway in feet
-          - name: roadway_dimensions_area
-            description: >-
-              The total square footage of the roadway area in front of the
-              restaurant
-          - name: approved_for_sidewalk_seating
-            description: Is the restaurant approved for sidewalk seating?
-          - name: approved_for_roadway_seating
-            description: Is the restaurant approved for roadway seating?
-          - name: qualify_alcohol
-            description: Does this restaurant qualify to serve alcohol
-          - name: sla_serial_number
-            description: The unique identifying number issued by the SLA
-          - name: sla_license_type
-            description: The category of the alcohol license issued to the restaurant
-          - name: landmark_district_or_building
-            description: Is the building a landmark district or in a building
-          - name: landmarkdistrict_terms
-            description: >-
-              Agreed to the terms and conditions of the Landmark district or
-              building
+            description: Borough where collision occurred
+          - name: zip_code
+            description: Postal code of incident occurrence
           - name: latitude
-            description: Latitude of the building's location
+            description: Latitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)
           - name: longitude
-            description: Longitude of the building's location
-          - name: community_board
-            description: the NYC Community District number where the restaurant is located
-          - name: council_district
-            description: >-
-              The Council District field indicates the New York City Council
-              District where the building is located
-          - name: census_tract
-            description: >-
-              The Census Tract field indicates the U.S Census Tract where the
-              building is located
-          - name: bin
-            description: >-
-              The BIN (Building Identification Number) is a unique identifier
-              for each building in the City.
-          - name: bbl
-            description: >-
-              The BBL (Borough, Block, Lot) is a unique identifier for each tax
-              lot in the City.
-          - name: nta
-            description: >-
-              The Neighborhood Tabulation Area field indicates the New York City
-              Neighborhood area where the building is located.
+            description: Longitude coordinate for Global Coordinate System, WGS 1984, decimal degrees (EPSG 4326)
+          - name: location
+            description: Latitude , Longitude pair
+          - name: on_street_name
+            description: Street on which the collision occurred
+          - name: off_street_name
+            description: Nearest cross street to the collision
+          - name: cross_street_name
+            description: Street address if known
+          - name: number_of_persons_injured
+            description: Number of persons injured
+          - name: number_of_persons_killed
+            description: Number of persons killed
+          - name: number_of_pedestrians_injured
+            description: Number of pedestrians injured
+          - name: number_of_pedestrians_killed
+            description: Number of pedestrians killed
+          - name: number_of_cyclist_injured
+            description: Number of cyclists injured
+          - name: number_of_cyclist_killed
+            description: Number of cyclists killed
+          - name: number_of_motorist_injured
+            description: Number of vehicle occupants injured
+          - name: number_of_motorist_killed
+            description: Number of vehicle occupants killed
+          - name: contributing_factor_vehicle_1
+            description: Factors contributing to the collision for designated vehicle
+          - name: contributing_factor_vehicle_2
+            description: Factors contributing to the collision for designated vehicle
+          - name: contributing_factor_vehicle_3
+            description: Factors contributing to the collision for designated vehicle
+          - name: contributing_factor_vehicle_4
+            description: Factors contributing to the collision for designated vehicle
+          - name: contributing_factor_vehicle_5
+            description: Factors contributing to the collision for designated vehicle
+          - name: vehicle_type_code1
+            description: Type of vehicle based on the selected vehicle category (ATV, bicycle, car/suv, ebike, escooter, truck/bus, motorcycle, other)
+          - name: vehicle_type_code2
+            description: Type of vehicle based on the selected vehicle category (ATV, bicycle, car/suv, ebike, escooter, truck/bus, motorcycle, other)
+          - name: vehicle_type_code3
+            description: Type of vehicle based on the selected vehicle category (ATV, bicycle, car/suv, ebike, escooter, truck/bus, motorcycle, other)
+          - name: vehicle_type_code4
+            description: Type of vehicle based on the selected vehicle category (ATV, bicycle, car/suv, ebike, escooter, truck/bus, motorcycle, other)
+          - name: vehicle_type_code5
+            description: Type of vehicle based on the selected vehicle category (ATV, bicycle, car/suv, ebike, escooter, truck/bus, motorcycle, other)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
