@@ -1,0 +1,26 @@
+-- models/marts/dim_governing-region.sql
+
+WITH governing_region AS (
+    SELECT DISTINCT
+        community_board,
+        council_district,
+        police_precinct
+    FROM {{ ref('stg_nyc_311_vehicle_complaints') }}
+    WHERE community_board IS NOT NULL
+),
+
+dim_problem_details AS (
+    SELECT
+        {{ dbt_utils.generate_surrogate_key([
+            'community_board',
+            'council_district',
+            'police_precinct'
+        ]) }} AS governing_region_key,
+        community_board,
+        council_district,
+        police_precinct
+    FROM governing_region
+)
+
+SELECT *
+FROM dim_governing_region
