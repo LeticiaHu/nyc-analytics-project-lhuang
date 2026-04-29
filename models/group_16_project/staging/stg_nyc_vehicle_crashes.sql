@@ -1,3 +1,4 @@
+
 -- Clean and standardize 311 NYP vehicle complaints service request data
 -- One row per service request
 
@@ -5,7 +6,7 @@ WITH source AS (
    SELECT * FROM {{ source('raw', 'source_nyc_vehicle_crashes') }}
 ), -- Easier to refer to the dbt reference to a long name table this way
 
-cleaned AS (
+cleaned AS ( 
    SELECT
        -- Get all columns from source, except ones we're transforming below
        -- To do cleaning on them or explicitly cast them as types just in case
