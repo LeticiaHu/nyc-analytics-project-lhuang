@@ -1,5 +1,5 @@
 -- Seating type dimension for open restaurant seating applications
-{{ config(materialized='table', schema='nyc_open_restaurant_apps') }}
+
 WITH seating_types AS (
    SELECT DISTINCT 
     seating_interest_sidewalk AS seating_interest,
@@ -10,7 +10,7 @@ WITH seating_types AS (
     END AS approved_for_sidewalk, 
     CASE
         WHEN UPPER(TRIM(CAST(approved_for_roadway_seating AS STRING))) IN ('YES', 'Y', 'TRUE', '1') THEN TRUE
-        WHEN UPPER(TRIM(CAST(approved_for_roadway_seating AS STRING))) IN ('NO', 'N', 'FALSE', '0') THEN FALSE
+        WHEN UPPER(TRIM(CAST(approved_for_roadway_seating AS STRING))) IN ('NO', 'N', 'FALSE', '0') THEN FALSE 
         ELSE NULL
     END AS approved_for_roadway
 
