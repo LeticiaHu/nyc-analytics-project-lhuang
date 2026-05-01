@@ -8,20 +8,21 @@ WITH locations AS (
         CAST(NULL AS STRING) AS off_street_name
     FROM {{ ref('stg_nyc_311_vehicle_complaints') }}
     WHERE borough IS NOT NULL
-       OR incident_zip IS NOT NULL 
-       OR street_name IS NOT NULL
+      AND incident_zip IS NOT NULL
+      AND street_name IS NOT NULL
        
     UNION DISTINCT
 
     SELECT DISTINCT 
         borough,
         zip_code,
-        CAST(NULL AS STRING) AS street_name,
+        on_street_name AS street_name,
         cross_street_name,
         off_street_name
     FROM {{ ref('stg_nyc_vehicle_crashes') }}
     WHERE borough IS NOT NULL
-       OR zip_code IS NOT NULL
+      AND zip_code IS NOT NULL
+      AND on_street_name IS NOT NULL
 ),
 
 final AS (
@@ -42,4 +43,5 @@ final AS (
     FROM locations
 )
 
-SELECT * FROM final
+SELECT *
+FROM final
