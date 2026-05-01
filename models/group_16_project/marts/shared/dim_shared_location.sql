@@ -4,7 +4,7 @@ WITH locations AS (
         borough,
         incident_zip AS zip_code,
         street_name,
-        CAST(NULL AS STRING) AS cross_street_name,
+        cross_street_1 AS cross_street_name,
         CAST(NULL AS STRING) AS off_street_name
     FROM {{ ref('stg_nyc_311_vehicle_complaints') }}
     WHERE borough IS NOT NULL
