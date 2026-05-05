@@ -10,7 +10,6 @@ prep as (
         collision_id,
         crash_date,
 
-        -- must match dim_location exactly
         upper(trim(cast(borough as string))) as borough,
         trim(cast(zip_code as string)) as zip_code,
         upper(trim(cast(on_street_name as string))) as street_name,
@@ -38,8 +37,9 @@ prep as (
         cast(motorists_injured as int64) as motorists_injured,
         cast(motorists_killed as int64) as motorists_killed,
 
-        latitude,
-        longitude
+        cast(latitude as float64) as latitude,
+        cast(longitude as float64) as longitude
+
     from base
 ),
 
@@ -92,11 +92,13 @@ keys as (
 joined as (
     select
         k.*,
+
         dloc.location_key,
         ddate.date_key,
         dcf.contributing_factor_key,
         dvt.vehicle_type_key,
         dpeo.people_key
+
     from keys k
 
     left join {{ ref('dim_location') }} dloc
@@ -126,12 +128,13 @@ select
 
     collision_id,
 
-    cast(latitude as float64) as latitude,
-    cast(longitude as float64) as longitude,
+    latitude,
+    longitude,
 
     case
-        when latitude is not null and longitude is not null
-        then st_geogpoint(cast(longitude as float64), cast(latitude as float64))
+        when latitude is not null
+         and longitude is not null
+        then st_geogpoint(longitude, latitude)
         else null
     end as location
 
