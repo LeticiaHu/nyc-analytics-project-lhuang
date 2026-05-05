@@ -7,19 +7,16 @@ with base as (
 
 prep as (
     select
-        -- Business ID (diagram has veh_crash_key + Collision_ID)
         collision_id,
-
         crash_date,
 
-        -- Shared location inputs (must match dim_shared_location)
-        borough,
-        cast(zip_code as string) as zip_code,
-        on_street_name as street_name,
-        cross_street_name,
-        off_street_name,
+        -- must match dim_location exactly
+        upper(trim(cast(borough as string))) as borough,
+        trim(cast(zip_code as string)) as zip_code,
+        upper(trim(cast(on_street_name as string))) as street_name,
+        upper(trim(cast(cross_street_name as string))) as cross_street_name,
+        upper(trim(cast(off_street_name as string))) as off_street_name,
 
-        -- Dim inputs
         contributing_factor_vehicle_1,
         contributing_factor_vehicle_2,
         contributing_factor_vehicle_3,
@@ -41,7 +38,6 @@ prep as (
         cast(motorists_injured as int64) as motorists_injured,
         cast(motorists_killed as int64) as motorists_killed,
 
-        -- Diagram attributes
         latitude,
         longitude
     from base
@@ -102,20 +98,24 @@ joined as (
         dvt.vehicle_type_key,
         dpeo.people_key
     from keys k
-    left join {{ ref('dim_shared_location') }} dloc
+
+    left join {{ ref('dim_location') }} dloc
         on dloc.location_key = k.location_key_calc
+
     left join {{ ref('dim_shared_date') }} ddate
         on ddate.date_key = k.date_key_calc
+
     left join {{ ref('dim_contributing_factors') }} dcf
         on dcf.contributing_factor_key = k.contributing_factor_key_calc
+
     left join {{ ref('dim_vehicle_type') }} dvt
         on dvt.vehicle_type_key = k.vehicle_type_key_calc
+
     left join {{ ref('dim_people') }} dpeo
         on dpeo.people_key = k.people_key_calc
 )
 
 select
-    -- diagram keys/ids
     collision_id as veh_crash_key,
 
     contributing_factor_key,
@@ -124,15 +124,15 @@ select
     location_key,
     date_key,
 
-    collision_id as collision_id,
+    collision_id,
 
     cast(latitude as float64) as latitude,
     cast(longitude as float64) as longitude,
 
     case
-      when latitude is not null and longitude is not null
-      then st_geogpoint(cast(longitude as float64), cast(latitude as float64))
-      else null
+        when latitude is not null and longitude is not null
+        then st_geogpoint(cast(longitude as float64), cast(latitude as float64))
+        else null
     end as location
 
 from joined
