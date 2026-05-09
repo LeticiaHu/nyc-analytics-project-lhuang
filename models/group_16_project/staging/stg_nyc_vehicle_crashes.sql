@@ -1,12 +1,11 @@
-
--- Clean and standardize 311 NYP vehicle complaints service request data
--- One row per service request
+-- Clean and standardize NYC vehicle crash data
+-- One row per reported vehicle crash
 
 WITH source AS (
    SELECT * FROM {{ source('raw', 'source_nyc_vehicle_crashes') }}
 ), -- Easier to refer to the dbt reference to a long name table this way
 
-cleaned AS ( 
+cleaned AS (
    SELECT
        -- Get all columns from source, except ones we're transforming below
        -- To do cleaning on them or explicitly cast them as types just in case
@@ -92,6 +91,7 @@ cleaned AS (
    AND crash_date IS NOT NULL
    AND CAST(crash_date AS DATETIME) >= DATE_SUB(CURRENT_DATETIME(), INTERVAL 7 YEAR)
    AND borough IS NOT NULL
+   AND zip_code IS NOT NULL
 
    -- Deduplicate
    QUALIFY ROW_NUMBER() OVER (PARTITION BY collision_id ORDER BY crash_date DESC) = 1

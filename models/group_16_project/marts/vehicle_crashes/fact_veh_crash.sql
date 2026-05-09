@@ -7,15 +7,23 @@ with base as (
 
 prep as (
     select
+        -- Business ID (diagram has veh_crash_key + Collision_ID)
+        {{ dbt_utils.generate_surrogate_key([
+            "collision_id"
+        ]) }} as veh_crash_key,
+
         collision_id,
+
         crash_date,
 
-        upper(trim(cast(borough as string))) as borough,
-        trim(cast(zip_code as string)) as zip_code,
-        upper(trim(cast(on_street_name as string))) as street_name,
-        upper(trim(cast(cross_street_name as string))) as cross_street_name,
-        upper(trim(cast(off_street_name as string))) as off_street_name,
+        -- Shared location inputs (must match dim_shared_location)
+        borough,
+        zip_code,
+        on_street_name as street_name,
+        cross_street_name,
+        off_street_name,
 
+        -- Dim inputs
         contributing_factor_vehicle_1,
         contributing_factor_vehicle_2,
         contributing_factor_vehicle_3,
@@ -37,23 +45,26 @@ prep as (
         cast(motorists_injured as int64) as motorists_injured,
         cast(motorists_killed as int64) as motorists_killed,
 
-        cast(latitude as float64) as latitude,
-        cast(longitude as float64) as longitude
-
+        -- Diagram attributes
+        latitude,
+        longitude
     from base
 ),
 
 keys as (
     select
         p.*,
-
-        {{ dbt_utils.generate_surrogate_key([
-            "borough",
-            "zip_code",
-            "street_name",
-            "cross_street_name",
-            "off_street_name"
-        ]) }} as location_key_calc,
+    {{ 
+        dbt_utils.generate_surrogate_key(
+            [
+                "borough",
+                "zip_code",
+                "street_name",
+                "cross_street_name",
+                "off_street_name",
+            ]
+        )
+    }} as location_key_calc,
 
         {{ dbt_utils.generate_surrogate_key([
             "cast(crash_date as date)"
@@ -92,34 +103,27 @@ keys as (
 joined as (
     select
         k.*,
-
         dloc.location_key,
         ddate.date_key,
         dcf.contributing_factor_key,
         dvt.vehicle_type_key,
         dpeo.people_key
-
     from keys k
-
-    left join {{ ref('dim_location') }} dloc
+    left join {{ ref('dim_shared_location') }} dloc
         on dloc.location_key = k.location_key_calc
-
     left join {{ ref('dim_shared_date') }} ddate
         on ddate.date_key = k.date_key_calc
-
     left join {{ ref('dim_contributing_factors') }} dcf
         on dcf.contributing_factor_key = k.contributing_factor_key_calc
-
     left join {{ ref('dim_vehicle_type') }} dvt
         on dvt.vehicle_type_key = k.vehicle_type_key_calc
-
     left join {{ ref('dim_people') }} dpeo
         on dpeo.people_key = k.people_key_calc
 )
 
 select
-    collision_id as veh_crash_key,
-
+    -- diagram keys/ids
+    veh_crash_key,
     contributing_factor_key,
     vehicle_type_key,
     people_key,
@@ -128,14 +132,13 @@ select
 
     collision_id,
 
-    latitude,
-    longitude,
+    cast(latitude as float64) as latitude,
+    cast(longitude as float64) as longitude,
 
     case
-        when latitude is not null
-         and longitude is not null
-        then st_geogpoint(longitude, latitude)
-        else null
+      when latitude is not null and longitude is not null
+      then st_geogpoint(cast(longitude as float64), cast(latitude as float64))
+      else null
     end as location
 
 from joined

@@ -1,43 +1,50 @@
-WITH locations AS (
+with
+    locations as (
 
-    SELECT DISTINCT
-        UPPER(TRIM(CAST(borough AS STRING))) AS borough,
-        TRIM(CAST(incident_zip AS STRING)) AS zip_code,
-        UPPER(TRIM(CAST(street_name AS STRING))) AS street_name,
-        UPPER(TRIM(CAST(cross_street_1 AS STRING))) AS cross_street_name,
-        CAST(NULL AS STRING) AS off_street_name
-    FROM {{ ref('stg_nyc_311_vehicle_complaints') }}
+        select distinct
+            borough,
+            incident_zip as zip_code,
+            street_name,
+            cross_street_1 as cross_street_name,
+            cast(null as string) as off_street_name
+        from {{ ref("stg_nyc_311_vehicle_complaints") }}
+        where
+            borough is not null and incident_zip is not null
 
-    UNION DISTINCT
+        union distinct
 
-    SELECT DISTINCT 
-        UPPER(TRIM(CAST(borough AS STRING))) AS borough,
-        TRIM(CAST(zip_code AS STRING)) AS zip_code,
-        UPPER(TRIM(CAST(on_street_name AS STRING))) AS street_name,
-        UPPER(TRIM(CAST(cross_street_name AS STRING))) AS cross_street_name,
-        UPPER(TRIM(CAST(off_street_name AS STRING))) AS off_street_name
-    FROM {{ ref('stg_nyc_vehicle_crashes') }}
-),
+        select distinct
+            borough,
+            zip_code,
+            on_street_name as street_name,
+            cross_street_name,
+            off_street_name
+        from {{ ref("stg_nyc_vehicle_crashes") }}
+        where
+            borough is not null and zip_code is not null
+    ),
 
-final AS (
+    final as (
 
-    SELECT
-        {{ dbt_utils.generate_surrogate_key([
-            'borough',
-            'zip_code',
-            'street_name',
-            'cross_street_name',
-            'off_street_name'
-        ]) }} AS location_key,
-        borough,
-        zip_code,
-        street_name,
-        cross_street_name,
-        off_street_name
-    FROM locations
-)
+        select
+            {{
+                dbt_utils.generate_surrogate_key(
+                    [
+                        "borough",
+                        "zip_code",
+                        "street_name",
+                        "cross_street_name",
+                        "off_street_name",
+                    ]
+                )
+            }} as location_key,
+            borough,
+            zip_code,
+            street_name,
+            cross_street_name,
+            off_street_name
+        from locations
+    )
 
-SELECT *
-FROM final
-
-
+select *
+from final
