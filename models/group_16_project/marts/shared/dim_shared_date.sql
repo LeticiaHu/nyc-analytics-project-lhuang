@@ -8,20 +8,12 @@ WITH dates AS (
 
    UNION DISTINCT
 
-   -- Get dates from vehicle crashes
---    SELECT DISTINCT 
---     CAST(crash_date AS DATE) AS full_date,
---     FORMAT_TIME('%H',PARSE_TIME('%H:%M', crash_time)) AS hour_of_day,
---    FROM {{ ref('stg_nyc_vehicle_crashes') }}
---    WHERE crash_date IS NOT NULL
---     AND crash_time IS NOT NULL --- NEW LINE ADDED TO TRY TO FIX THE HOUR PROBLEM
--- ),
     SELECT DISTINCT 
     CAST(crash_date AS DATE) AS full_date,
     FORMAT_TIME('%H', SAFE.PARSE_TIME('%H:%M', crash_time)) AS hour_of_day
     FROM {{ ref('stg_nyc_vehicle_crashes') }}
     WHERE crash_date IS NOT NULL
-    AND crash_time IS NOT NULL
+    AND crash_time IS NOT NULL --- NEW LINE ADDED TO TRY TO FIX THE HOUR PROBLEM
 ),    
 final AS (
 
