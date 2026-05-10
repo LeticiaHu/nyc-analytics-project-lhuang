@@ -1,10 +1,9 @@
-
 -- models/marts/dim_people.sql
 
 WITH people AS (
     SELECT DISTINCT
         CAST(persons_injured AS INT64) AS persons_injured,
-        CAST(persons_killed AS INT64) AS persons_killed,
+        COALESCE(SAFE_CAST(persons_killed AS INT64), 0) AS persons_killed,--- Updated this line with COALESCE because was giving NULL values
         CAST(pedestrians_injured AS INT64) AS pedestrians_injured,
         CAST(pedestrians_killed AS INT64) AS pedestrians_killed,
         CAST(cyclists_injured AS INT64) AS cyclists_injured,
