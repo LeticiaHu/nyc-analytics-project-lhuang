@@ -37,7 +37,7 @@ with
                         "off_street_name",
                     ]
                 )
-            }} as location_key,
+            }} as location_key, 
             borough,
             zip_code,
             street_name,
