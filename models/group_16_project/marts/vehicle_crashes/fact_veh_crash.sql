@@ -80,7 +80,7 @@ keys as (
             "contributing_factor_vehicle_5"
         ]) }} as contributing_factor_key_calc,
 
-        {{ dbt_utils.generate_surrogate_key([
+        {{ dbt_utils.generate_surrogate_key([ 
             "vehicle_type_code1",
             "vehicle_type_code2",
             "vehicle_type_code_3",
