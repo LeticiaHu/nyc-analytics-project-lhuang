@@ -143,4 +143,4 @@ select
       else null
     end as location
 
-from joined
+from joined 
