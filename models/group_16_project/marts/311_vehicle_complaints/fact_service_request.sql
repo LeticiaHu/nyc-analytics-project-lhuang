@@ -5,4 +5,4 @@ SELECT
     created_date,
     complaint_type,
     borough
-FROM {{ ref('stg_nyc_vehicle_crash') }}
+FROM {{ ref('stg_nyc_vehicle_crashes') }}
