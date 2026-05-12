@@ -1,8 +1,8 @@
 {{ config(materialized='table') }}
 
 SELECT
-    unique_key,
-    created_date,
-    complaint_type,
-    borough
+    collision_id,
+    crash_date,
+    crash_time,
+
 FROM {{ ref('stg_nyc_vehicle_crashes') }}
